@@ -1,19 +1,21 @@
 import cv2
 import scipy as sp
+from matplotlib import pyplot as plt
 
 def imagess(image1,image2):
-    img1 = cv2.imread (image1, 0)
+    img1 = cv2.imread (image1,0)
     img2 = cv2.imread (image2, 0)
 
     # Initiate SIFT detector
-    # sift = cv2.SIFT ()
     sift = cv2.xfeatures2d.SIFT_create ()
 
 
     # find the keypoints and descriptors with SIFT
     kp1, des1 = sift.detectAndCompute (img1, None)
     kp2, des2 = sift.detectAndCompute (img2, None)
-
+    # print(des1[0].shape,"\n",des1[1].shape)
+    # print("\n\n")
+    # print(des1[1],"\n",des2[1])
     # FLANN parameters
     FLANN_INDEX_KDTREE = 0
     index_params = dict (algorithm=FLANN_INDEX_KDTREE, trees=5)
@@ -21,7 +23,8 @@ def imagess(image1,image2):
     flann = cv2.FlannBasedMatcher (index_params, search_params)
     matches = flann.knnMatch (des1, des2, k=2)
 
-    print('matches...', len (matches))
+    # print('matches...', len (matches))
+    # print(matches)
 
     # Apply ratio test
     good = []
@@ -30,26 +33,31 @@ def imagess(image1,image2):
             good.append (m)
     print('good', len (good))
 
+    # img3 = cv2.drawMatchesKnn (img1, kp1, img2, kp2, good[:10], None, flags=2)
+    # # cv2.drawm
+    # plt.imshow (img3)
+    # plt.show ()
+
     # #####################################
     # visualization
-    h1, w1 = img1.shape[:2]
-    h2, w2 = img2.shape[:2]
-    view = sp.zeros ((max (h1, h2), w1 + w2, 3), sp.uint8)
-    view[:h1, :w1, 0] = img1
-    view[:h2, w1:, 0] = img2
-    view[:, :, 1] = view[:, :, 0]
-    view[:, :, 2] = view[:, :, 0]
-
-    for m in good:
-        # draw the keypoints
-        # print m.queryIdx, m.trainIdx, m.distance
-        color = tuple ([sp.random.randint (0, 255) for _ in xrange (3)])
-        # print 'kp1,kp2',kp1,kp2
-        cv2.line (view, (int (kp1[m.queryIdx].pt[0]), int (kp1[m.queryIdx].pt[1])),
-                  (int (kp2[m.trainIdx].pt[0] + w1), int (kp2[m.trainIdx].pt[1])), color)
-
-    cv2.imshow ("view", view)
-    cv2.waitKey ()
+    # h1, w1 = img1.shape[:2]
+    # h2, w2 = img2.shape[:2]
+    # view = sp.zeros ((max (h1, h2), w1 + w2, 3), sp.uint8)
+    # view[:h1, :w1, 0] = img1
+    # view[:h2, w1:, 0] = img2
+    # view[:, :, 1] = view[:, :, 0]
+    # view[:, :, 2] = view[:, :, 0]
+    #
+    # for m in good:
+    #     # draw the keypoints
+    #     # print m.queryIdx, m.trainIdx, m.distance
+    #     color = tuple ([sp.random.randint (0, 255) for _ in range (3)])
+    #     # print 'kp1,kp2',kp1,kp2
+    #     cv2.line (view, (int (kp1[m.queryIdx].pt[0]), int (kp1[m.queryIdx].pt[1])),
+    #               (int (kp2[m.trainIdx].pt[0] + w1), int (kp2[m.trainIdx].pt[1])), color)
+    #
+    # cv2.imshow ("view", view)
+    # cv2.waitKey ()
 
 if __name__ == '__main__':
     image1 = './test01/1.JPG'
