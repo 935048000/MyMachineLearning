@@ -7,13 +7,13 @@ import argparse
 
 from extract_cnn_vgg16_keras import extract_feat
 
-
-ap = argparse.ArgumentParser()
-ap.add_argument("-database", required = True,
-	help = "通往数据库的路径，其中包含要被索引的图像")
-ap.add_argument("-index", required = True,
-	help = "索引文件的名称")
-args = vars(ap.parse_args())
+# 命令行参数功能
+# ap = argparse.ArgumentParser()
+# ap.add_argument("-database", required = True,
+# 	help = "通往数据库的路径，其中包含要被索引的图像")
+# ap.add_argument("-index", required = True,
+# 	help = "索引文件的名称")
+# args = vars(ap.parse_args())
 
 
 '''
@@ -27,13 +27,11 @@ def get_imlist(path):
  提取特征和索引图像
 '''
 if __name__ == "__main__":
-
-    db = args["database"]
+    # db = args["database"]
+    db = "./imagesets"
     img_list = get_imlist(db)
-    
-    print ("--------------------------------------------------")
-    print ("         特征提取开始")
-    print ("--------------------------------------------------")
+
+    print ("\n特征提取开始!\n")
     
     feats = []
     names = []
@@ -49,20 +47,18 @@ if __name__ == "__main__":
 
     feats = np.array(feats)
     # 存储提取特征的目录
-    output = args["index"]
+    output = "./youdianCNN.h5"
+    # output = args["index"]
 
-    
-    print ("--------------------------------------------------")
-    print ("      写入特征提取结果...")
-    print ("--------------------------------------------------")
-    
-    h5f = h5py.File(output, 'w',)
-    # h5f.attrs['dataset_1'] = [a.encode ('utf8') for a in mylist]
-    h5f.create_dataset('dataset_1', data = feats)
-    # dt = h5py.special_dtype (vlen=unicode)
+    print ("\n写入特征提取结果......\n")
+
+    # 数据编码转换
     namess = []
     for j in names:
-        namess.append(j.encode())
+        namess.append (j.encode ())
+
+    h5f = h5py.File(output, 'w',)
+    h5f.create_dataset('dataset_1', data = feats)
     h5f.create_dataset('dataset_2',  data = namess)
     h5f.close()
 
