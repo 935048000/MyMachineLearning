@@ -41,13 +41,12 @@ if __name__ == "__main__":
         img_name = os.path.split(img_path)[1]
         feats.append(norm_feat)
         names.append(img_name)
-        # print(names)
-
         print ("从图像中提取特征: %d ,图片总:%d" %((i+1), len(img_list)))
 
     feats = np.array(feats)
+
     # 存储提取特征的目录
-    output = "./youdianCNN.h5"
+    output = "./youdian2CNN.h5"
     # output = args["index"]
 
     print ("\n写入特征提取结果......\n")
