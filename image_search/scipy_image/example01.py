@@ -12,17 +12,6 @@ def imageSearch(matches):
     # print('good', len (good))
     return (len (good))
 
-def saveFile(data,filename):
-    with open(filename,"a") as f:
-        f.write(data)
-    return 0
-
-def getFile(filename):
-    with open(filename,"r") as f:
-        data = f.read()
-    return data
-
-
 def imagess(image1,image2,image3):
     img1 = cv2.imread (image1,0)
     img2 = cv2.imread (image2, 0)
