@@ -4,7 +4,7 @@ import os
 import h5py
 import numpy as np
 import argparse
-
+import time
 from extract_cnn_vgg16_keras import extract_feat
 
 # 命令行参数功能
@@ -27,6 +27,8 @@ def get_imlist(path):
  提取特征和索引图像
 '''
 if __name__ == "__main__":
+    start = time.clock ()
+
     # db = args["database"]
     db = "./imagesets"
     img_list = get_imlist(db)
@@ -46,7 +48,7 @@ if __name__ == "__main__":
     feats = np.array(feats)
 
     # 存储提取特征的目录
-    output = "./youdian2CNN.h5"
+    output = "./youdian3CNN.h5"
     # output = args["index"]
 
     print ("\n写入特征提取结果......\n")
@@ -61,4 +63,6 @@ if __name__ == "__main__":
     h5f.create_dataset('dataset_2',  data = namess)
     h5f.close()
 
+    elapsed = (time.clock() - start)
+    print ("Time used:{}s".format(elapsed))
 

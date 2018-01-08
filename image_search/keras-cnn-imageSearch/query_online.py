@@ -22,7 +22,7 @@ import argparse
 
 
 # Model = args[index'']
-Model = "./youdianCNN.h5"
+Model = "./youdian2CNN.h5"
 # 读取索引图像的特征向量和相应的图像名称
 h5f = h5py.File(Model,'r')
 feats = h5f['dataset_1'][:]
@@ -30,13 +30,13 @@ imgNames = h5f['dataset_2'][:]
 h5f.close()
 
 # queryDir = args['query']
-queryDir = "./imagesets/19700102130428480.JPEG"
+queryDir = "./imagesets/19700102142532557.JPEG"
 
 # 读取和显示查询图像
-queryImg = mpimg.imread(queryDir)
-plt.title("Query Image")
-plt.imshow(queryImg)
-plt.show()
+# queryImg = mpimg.imread(queryDir)
+# plt.title("Query Image")
+# plt.imshow(queryImg)
+# plt.show()
 
 
 # 提取查询图像的特征，计算 simlarity 评分和排序

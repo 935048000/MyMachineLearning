@@ -23,7 +23,7 @@ def extract_feat(img_path):
     #               图片的宽高必须大于48，如 (200, 200, 3)
     # include_top：是否保留顶层的3个全连接网络
     
-    input_shape = (500, 1000, 3)
+    input_shape = (272, 480, 3)
     model = VGG16(weights = 'imagenet', input_shape = (input_shape[0],input_shape[1],input_shape[2]), pooling = 'max', include_top = False)
         
     img = image.load_img(img_path, target_size=(input_shape[0], input_shape[1]))
