@@ -20,7 +20,7 @@ import argparse
 # args = vars(ap.parse_args())
 # print(args)
 
-
+# 显示
 def showimage(queryImage,imlist,result):
     # 读取和显示查询图像
     queryImg = mpimg.imread(queryImage)
@@ -37,8 +37,8 @@ def showimage(queryImage,imlist,result):
     return 0
 
 # result = args['result']
-result = "./imagesets"
 # Model = args[index'']
+result = "./imagesets"
 Model = "./youdian2CNN.h5"
 
 # 读取索引图像的特征向量和相应的图像名称
