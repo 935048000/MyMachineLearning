@@ -48,15 +48,15 @@ imgNames = h5f['dataset_2'][:]
 h5f.close()
 
 # queryImage = args['query']
-# queryImage = "./imagesets/19700102142532557.JPEG"
-queryImage = "D:/datasets/trainingset1/19700102130026909.JPEG"
+queryImage = "./imagesets/19700102142532557.JPEG"
+# queryImage = "D:/datasets/trainingset1/19700102130026909.JPEG"
 
 
 
 
 # 提取查询图像的特征，计算 simlarity 评分和排序
 queryVec = extract_feat(queryImage)
-scores = np.dot(queryVec, feats.T) # 计算点积,计算图像得分
+scores = np.dot(queryVec, feats) # 计算点积（内积）,计算图像得分
 rank_ID = np.argsort(scores)[::-1] # 排序,倒序，大到小
 rank_score = scores[rank_ID] # 计算评分
 # print("scores",scores,type(scores))

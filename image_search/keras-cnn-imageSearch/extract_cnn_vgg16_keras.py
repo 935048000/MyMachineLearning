@@ -35,15 +35,11 @@ def extract_feat(img_path):
     return norm_feat
 
 
-
-"""
-使用教程：
-"""
-
 if __name__ == '__main__':
     print("local run .....")
-    # model = VGG16 (weights='imagenet', include_top=False)
-    #
+
+
+    # model = VGG16 (weights='imagenet', pooling = 'max', include_top=False)
     # img_path = './database/001_accordion_image_0001.jpg'
     # img = image.load_img (img_path, target_size=(224, 224))
     # x = image.img_to_array (img)
@@ -51,6 +47,10 @@ if __name__ == '__main__':
     # x = preprocess_input (x)
     # features = model.predict (x)
     # norm_feat = features[0]/LA.norm(features[0])
-    # print(norm_feat)
-    a = [1,2,3,4]
-    print(a[::-1])
+    # feats = np.array(norm_feat)
+    # print(norm_feat.shape)
+    # print(feats.shape)
+
+    # norm_feat = extract_feat(img_path)
+    # print(norm_feat.shape)
+
