@@ -57,6 +57,8 @@ queryImage = "./imagesets/19700102142532557.JPEG"
 # 提取查询图像的特征，计算 simlarity 评分和排序
 queryVec = extract_feat(queryImage)
 scores = np.dot(queryVec, feats.T) # 计算点积（内积）,计算图像得分
+# 矩阵乘法并把（纵列）向量当作n×1 矩阵，点积还可以写为：a·b=a^T*b。
+# 点积越大，说明向量夹角越小。点积等于1，则向量为同向，向量夹角0度。
 rank_ID = np.argsort(scores)[::-1] # 排序,倒序，大到小
 rank_score = scores[rank_ID] # 计算评分
 # print("scores",scores,type(scores))
