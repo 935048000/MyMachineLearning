@@ -52,3 +52,5 @@ if __name__ == '__main__':
     # features = model.predict (x)
     # norm_feat = features[0]/LA.norm(features[0])
     # print(norm_feat)
+    a = [1,2,3,4]
+    print(a[::-1])
