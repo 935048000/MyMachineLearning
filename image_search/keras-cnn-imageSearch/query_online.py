@@ -36,10 +36,13 @@ def showimage(queryImage,imlist,result):
 
     return 0
 
+# 图片信息目录
+DirPath = "D:/datasets/testingset001/"
+
 # result = args['result']
 # Model = args[index'']
 result = "./imagesets"
-Model = "./youdian2CNN.h5"
+Model = "./image200CNN.h5"
 
 # 读取索引图像的特征向量和相应的图像名称
 h5f = h5py.File(Model,'r')
@@ -48,10 +51,16 @@ imgNames = h5f['dataset_2'][:]
 h5f.close()
 
 # queryImage = args['query']
-queryImage = "./imagesets/19700102142532557.JPEG"
+# queryImage = "./imagesets/19700102142532557.JPEG"
+# queryImage = "D:/datasets/testingset001/19700102141601727.JPEG"
 # queryImage = "D:/datasets/trainingset1/19700102130026909.JPEG"
+queryImage = "D:/datasets/002/19700102132424765.JPEG"
 
-
+print("原图为：",queryImage)
+queryImageName = queryImage[:-5]
+queryImageName = queryImageName+".txt"
+with open(queryImageName,'r',encoding='utf-8') as f:
+    print("原图信息：",f.readline())
 
 
 # 提取查询图像的特征，计算 simlarity 评分和排序
@@ -66,7 +75,7 @@ rank_score = scores[rank_ID] # 计算评分
 # print ("rank_score",rank_score,type(rank_score))
 
 
-# 显示的顶部检索图像数目
+# 检索显示的相似度最高的图像数目
 maxres = 3 # 显示三个
 imList = []
 scoresList = []
@@ -79,7 +88,19 @@ for j in rank_score[0:maxres]:
     scoresList.append(_temp)
 
 print ("最高的%d张图片为: " %maxres, imList)
+
+imgInfo = []
+for j in imList:
+    j = j[:-5]
+    j = j+".txt"
+    fileName = DirPath+j
+    with open(fileName,'r',encoding='utf-8') as f:
+        imgInfo.append(f.readline().strip("\n"))
+
+print ("图片信息为: ",imgInfo )
+
+
 print ("最高%d张图片的相似度评分："%maxres,scoresList)
  
 
-showimage(queryImage,imList,result)
+# showimage(queryImage,imList,result)
