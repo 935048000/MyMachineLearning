@@ -18,7 +18,11 @@ import argparse
 # ap.add_argument("-result", required = True,
 # 	help = "输出检索图像的路径")
 # args = vars(ap.parse_args())
-# print(args)
+#
+# result = args['result']
+# Model = args[index'']
+# queryImage = args['query']
+
 
 # 显示
 def showimage(queryImage,imlist,result):
@@ -39,8 +43,7 @@ def showimage(queryImage,imlist,result):
 # 图片信息目录
 DirPath = "D:/datasets/testingset001/"
 
-# result = args['result']
-# Model = args[index'']
+
 result = "./imagesets"
 Model = "./image200CNN.h5"
 
@@ -50,7 +53,7 @@ feats = h5f['dataset_1'][:]
 imgNames = h5f['dataset_2'][:]
 h5f.close()
 
-# queryImage = args['query']
+
 # queryImage = "./imagesets/19700102142532557.JPEG"
 # queryImage = "D:/datasets/testingset001/19700102141601727.JPEG"
 # queryImage = "D:/datasets/trainingset1/19700102130026909.JPEG"
