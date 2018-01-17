@@ -6,6 +6,7 @@ import numpy as np
 import argparse
 import time
 from extract_cnn_vgg16_keras import extract_feat
+from memory_profiler import profile
 
 # 命令行参数功能
 # ap = argparse.ArgumentParser()
@@ -45,6 +46,7 @@ def wH5FileData(i,feats,names,filename):
 
 
 # 提取特征并写入文件
+# @profile (precision=6)
 def etlFeature(img_list,h5filename):
 
     names = []
