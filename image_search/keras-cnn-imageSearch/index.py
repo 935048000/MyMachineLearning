@@ -27,11 +27,11 @@ def get_imlist(path):
  提取特征和索引图像
 '''
 if __name__ == "__main__":
-    start = time.clock ()
 
     # db = args["database"]
     # db = "./imagesets"
-    db = "D:/datasets/002"
+    # db = "D:/datasets/002"
+    db = "./image"
     img_list = get_imlist(db)
 
     print ("\n特征提取开始!\n")
@@ -49,7 +49,7 @@ if __name__ == "__main__":
     feats = np.array(feats)
 
     # 存储提取特征的目录
-    output = "./image200CNN.h5"
+    output = "./test.h5"
     # output = args["index"]
 
     print ("\n写入特征提取结果......\n")
