@@ -7,6 +7,7 @@ import argparse
 import time
 from extract_cnn_vgg16_keras import extract_feat
 from memory_profiler import profile
+from pyprind import ProgBar
 
 # 命令行参数功能
 # ap = argparse.ArgumentParser()
@@ -22,14 +23,19 @@ def get_imlist(path):
     return [os.path.join (path, f) for f in os.listdir (path) if f.endswith ('.JPEG')]
 
 # 按指定格式读取h5文件
-def rH5FileData(i,filename):
-    with h5py.File (filename, 'r') as h5f:
-        feats = h5f["data" + str (i)][:]
-        imgNames = h5f["name" + str (i)][:]
-        return feats,imgNames
+def rH5FileData(Key,filename):
+    try:
+        with h5py.File (filename, 'r') as h5f:
+            feats = h5f["data" + str (Key)][:]
+            imgNames = h5f["name" + str (Key)][:]
+            return feats,imgNames[0].decode("utf-8")
+    except KeyError:
+        print("Read HDF5 File Key Error")
+        return 1
+
 
 # 按指定格式写入h5文件
-def wH5FileData(i,feats,names,filename):
+def wH5FileData(Key,feats,names,filename):
     namess = []
     # 数据编码转换
     if type(names) is list:
@@ -37,59 +43,94 @@ def wH5FileData(i,feats,names,filename):
             namess.append (j.encode ())
     else:
         names.encode ()
-
-    h5f = h5py.File (filename, 'a')
-    h5f.create_dataset ("data"+str(i), data=feats)
-    h5f.create_dataset ("name"+str(i), data=namess)
-    h5f.close ()
+    try:
+        with h5py.File (filename, 'a') as h5f:
+            h5f.create_dataset ("data"+str(Key), data=feats)
+            h5f.create_dataset ("name"+str(Key), data=namess)
+    except RuntimeError:
+        raise NameError('Unable to create link (name already exists)')
     return 0
 
 
 # 提取特征并写入文件
 # @profile (precision=6)
-def etlFeature(img_list,h5filename):
+def etlFeature(post,img_list,h5filename):
 
-    names = []
     # 迭代方式，提取特征值写入h5文件
+    bar = ProgBar (len(img_list), monitor=True, title="提取图片特征,Image Total:%d" % len (img_list))
     for i, img_path in enumerate (img_list):
         norm_feat = extract_feat (img_path)
         img_name = os.path.split (img_path)[1]
+        names = []
         names.append (img_name)
         feats2 = np.array (norm_feat)
-        wH5FileData (i, feats2, names,h5filename)
-        print ("从图像中提取特征: %d ,图片总:%d" % ((i + 1), len (img_list)))
+        try:
+            wH5FileData (i+post, feats2, names,h5filename)
+        except:
+            print("Feats Write Error")
+            return 1
+        bar.update ()
+        # print ("提取图片特征！进度: %d/%d" % ((i + 1), len (img_list)))
+    print (bar)
     return 0
 
 
+# 获取HDF5文件数据数量，便于追加。
+def showHDF5Len(filename):
+    # 文件不存在则重写，不追加
+    if not os.path.exists(filename):
+        return 0
+    # 存在则追加
+    with h5py.File (filename, 'r') as h5f:
+        return int(len(h5f)/2)
+
+
+
 if __name__ == "__main__":
-    # db = "./image"
-    db = "D:/datasets/003"
-    img_list = get_imlist (db)
-    print ("\n特征提取开始!\n")
+    db1 = "D:/datasets/001"
+    db2 = "D:/datasets/002"
+    db3 = "D:/datasets/003"
+    img_list1 = get_imlist (db1)
+    img_list2 = get_imlist (db2)
+    img_list3 = get_imlist (db3)
+
+    db4 = "./image"
+    img_list4 = get_imlist(db4)
 
     feats = []
-    h5filename = "./model"
-    h5filename = h5filename + str(len(img_list)) + ".h5"
+    # 数据文件
+    h5filename = "./imageCNNModel_03.h5"
 
-    etlFeature (img_list, h5filename)
+    # 文件条数
+    # lens = showHDF5Len (h5filename)
+    # print(lens)
 
 
-    # 读取
-    featsList = []
-    nameList = []
-    imagesize = int(h5filename[7:-3])
-    for i in range (imagesize):
-        feats, imgNames = rH5FileData (i, h5filename)
-        featsList.append (feats)
-        nameList.append (imgNames[0])
+    # etlFeature (showHDF5Len (h5filename), img_list1, h5filename)
 
-    queryVec = extract_feat("./image/19700102125648863.JPEG")
-    featsList = np.array(featsList)
-    scores = np.dot(queryVec, featsList.T)
-    rank_ID = np.argsort(scores)[::-1] # 排序,倒序，大到小
-    rank_score = scores[rank_ID] # 计算评分
-    print(rank_score)
 
+
+
+
+    # for i in range (showHDF5Len (h5filename)):
+    #     feats, imgNames = rH5FileData (i, h5filename)
+    #     print(imgNames)
+
+
+    # 读取数据
+    # featsList = []
+    # nameList = []
+    # for i in range (lens):
+    #     feats, imgNames = rH5FileData (i, h5filename)
+    #     featsList.append (feats)
+    #     nameList.append (imgNames)
+
+    # queryVec = extract_feat("./image/19700102125648863.JPEG")
+    # featsList = np.array(featsList)
+    # scores = np.dot(queryVec, featsList.T)
+    # rank_ID = np.argsort(scores)[::-1] # 排序,倒序，大到小
+    # rank_score = scores[rank_ID] # 计算评分
+    # print(rank_score)
 
 
 
