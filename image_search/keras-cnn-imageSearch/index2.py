@@ -9,20 +9,20 @@ from extract_cnn_vgg16_keras import extract_feat
 # from memory_profiler import profile
 from pyprind import ProgBar
 
+# 返回目录中所有jpg图像的文件名列表。
+def getImageList(path):
+    return [os.path.join (path, f) for f in os.listdir (path) if f.endswith ('.JPEG')]
+
 # 命令行参数功能
 def comdArgs():
     ap = argparse.ArgumentParser()
-    ap.add_argument("-database", required = True, help = "通往数据库的路径，其中包含要被索引的图像")
-    ap.add_argument("-index", required = True, help = "索引文件的名称")
+    ap.add_argument("-d", required = True, help = "训练集的路径")
+    ap.add_argument("-f", required = True, help = "特征索引文件的路径名称")
     args = vars(ap.parse_args())
-    # db = args["database"]
-    # h5filename = args["index"]
-    return args["database"],args["index"]
+    # datasets = args["d"]
+    # h5filename = args["f"]
+    return getImageList(args["d"]),args["f"]
 
-
-# 返回目录中所有jpg图像的文件名列表。
-def get_imlist(path):
-    return [os.path.join (path, f) for f in os.listdir (path) if f.endswith ('.JPEG')]
 
 # 按指定格式读取h5文件
 def rH5FileData(Key,filename):
@@ -87,22 +87,18 @@ def showHDF5Len(filename):
         return int(len(h5f)/2)
 
 
+def main():
+    feats = []
+    h5filename = "./imageCNN.h5"
+    dataset = ""
+    img_list = getImageList(dataset)
+    etlFeature (showHDF5Len (h5filename), img_list, h5filename)
+    return 0
+
 
 if __name__ == "__main__":
-    # db1 = "D:/datasets/001"
-    # db2 = "D:/datasets/002"
-    # db3 = "D:/datasets/003"
-    # img_list1 = get_imlist (db1)
-    # img_list2 = get_imlist (db2)
-    # img_list3 = get_imlist (db3)
-    #
-    # db4 = "./image"
-    # img_list4 = get_imlist(db4)
 
-    # img_list = get_imlist (db)
-
-
-    feats = []
+    # feats = []
     # 数据文件
     # h5filename = "./imageCNNModel_03.h5"
 
@@ -112,7 +108,7 @@ if __name__ == "__main__":
     # print(lens)
 
 
-    etlFeature (showHDF5Len (h5filename), img_list, h5filename)
+    # etlFeature (showHDF5Len (h5filename), img_list, h5filename)
 
 
 
