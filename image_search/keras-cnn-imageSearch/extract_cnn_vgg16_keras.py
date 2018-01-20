@@ -32,6 +32,7 @@ def extract_feat(img_path):
     img = np.expand_dims(img, axis=0)
     img = preprocess_input(img)
     feat = model.predict(img)
+    # 归一化
     norm_feat = feat[0]/LA.norm(feat[0])
     return norm_feat
 
