@@ -6,16 +6,18 @@ import numpy as np
 import argparse
 import time
 from extract_cnn_vgg16_keras import extract_feat
-from memory_profiler import profile
+# from memory_profiler import profile
 from pyprind import ProgBar
 
 # 命令行参数功能
-# ap = argparse.ArgumentParser()
-# ap.add_argument("-database", required = True,
-# 	help = "通往数据库的路径，其中包含要被索引的图像")
-# ap.add_argument("-index", required = True,
-# 	help = "索引文件的名称")
-# args = vars(ap.parse_args())
+def comdArgs():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("-database", required = True, help = "通往数据库的路径，其中包含要被索引的图像")
+    ap.add_argument("-index", required = True, help = "索引文件的名称")
+    args = vars(ap.parse_args())
+    # db = args["database"]
+    # h5filename = args["index"]
+    return args["database"],args["index"]
 
 
 # 返回目录中所有jpg图像的文件名列表。
@@ -87,26 +89,30 @@ def showHDF5Len(filename):
 
 
 if __name__ == "__main__":
-    db1 = "D:/datasets/001"
-    db2 = "D:/datasets/002"
-    db3 = "D:/datasets/003"
-    img_list1 = get_imlist (db1)
-    img_list2 = get_imlist (db2)
-    img_list3 = get_imlist (db3)
+    # db1 = "D:/datasets/001"
+    # db2 = "D:/datasets/002"
+    # db3 = "D:/datasets/003"
+    # img_list1 = get_imlist (db1)
+    # img_list2 = get_imlist (db2)
+    # img_list3 = get_imlist (db3)
+    #
+    # db4 = "./image"
+    # img_list4 = get_imlist(db4)
 
-    db4 = "./image"
-    img_list4 = get_imlist(db4)
+    # img_list = get_imlist (db)
+
 
     feats = []
     # 数据文件
-    h5filename = "./imageCNNModel_03.h5"
+    # h5filename = "./imageCNNModel_03.h5"
+
 
     # 文件条数
     # lens = showHDF5Len (h5filename)
     # print(lens)
 
 
-    # etlFeature (showHDF5Len (h5filename), img_list1, h5filename)
+    etlFeature (showHDF5Len (h5filename), img_list, h5filename)
 
 
 

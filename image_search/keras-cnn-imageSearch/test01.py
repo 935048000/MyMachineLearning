@@ -22,14 +22,23 @@
 
 import sys, time
 import pyprind
-from pyprind import ProgBar
 
-bar = ProgBar(30,monitor=True,title="job01")
-# for progress in pyprind.prog_bar(range(100)):
-# for progress in pyprind.prog_percent (range (100)):
+# from pyprind import ProgBar
+import pyprind
+import time
+bar = pyprind.ProgBar(30,monitor=True,title="job01",bar_char="-")
 for i in range(30):
-
     time.sleep (0.5)
     bar.update()
-
 print(bar)
+
+
+# import pyprind
+# import time
+# for progress in pyprind.prog_bar(range(20)):
+#     time.sleep (1)
+
+# import pyprind
+# import time
+# for progress in pyprind.prog_percent (range (20)):
+#     time.sleep (1)
