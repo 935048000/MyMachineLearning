@@ -145,7 +145,8 @@ def getSearchResult(maxres, imgNames, rank_ID, rank_score):
     
     return _imList, _scoresList
 
-def testSetTest():
+# 测试测试集
+def testSetTest(testSet,imageinfopath,feats,imgNames):
     resultnum = 2
     imageList = getImageList (testSet)
     probability = 00.00
@@ -173,10 +174,25 @@ def testSetTest():
     print ("错误率: %.2f%%" % (probability*100))
     print ("测试集错误的图片信息： ", testErrorList)
     print ("错误的图片最匹配的图片信息：", trainErrorList)
-    print ("\n\n")
     print ("测试集错误的图片： ", testImgErrorList)
     print ("错误的图片最匹配的图片：", trainImgErrorList)
+    return 0
 
+# 显示搜索结果
+def showSearchResult(resultnum,queryImage,imageinfopath,feats,imgNames):
+    # resultnum = 2
+    rank_ID, rank_score = featureSearch(queryImage,feats)
+    imList, scoresList = getSearchResult(resultnum,imgNames,rank_ID,rank_score)
+    imgInfoList = getImageInfo(imList,imageinfopath)
+    
+    print ("原图为：", queryImage)
+    print("原图信息",getImageInfo(queryImage,imageinfopath))
+    print ("最高的%d张图片为: " % resultnum, imList)
+    print ("最高%d张图片的相似度评分：" % resultnum, scoresList)
+    print ("图片信息为: ", imgInfoList)
+    
+    # showimage(queryImage,imList,result)
+    return 0
 
 if __name__ == '__main__':
     
@@ -185,27 +201,14 @@ if __name__ == '__main__':
     imageinfopath = "D:/datasets/imageinfo"
     Model = "./imageCNN.h5"
     # queryImage = "D:/datasets/trainingset1/19700102130430799.JPEG"
-    # queryImage = "D:/datasets/testingset/19700102130430799.JPEG"
+    queryImage = "D:/datasets/001/19700102130428480.JPEG"
     testSet = "D:/datasets/testingset"
     
     
     feats,imgNames = readFeature(Model)
-    
-    # rank_ID, rank_score = featureSearch(queryImage,feats)
-    
-    
-    
-    resultnum = 2
-    # imList, scoresList = getSearchResult(resultnum,imgNames,rank_ID,rank_score)
-    # imgInfoList = getImageInfo(imList,imageinfopath)
-    
-    # print ("原图为：", queryImage)
-    # print("原图信息",getImageInfo(queryImage,imageinfopath))
-    # print ("最高的%d张图片为: " % resultnum, imList)
-    # print ("最高%d张图片的相似度评分：" % resultnum, scoresList)
-    # print ("图片信息为: ", imgInfoList)
-    # showimage(queryImage,imList,result)
 
+    showSearchResult (3, queryImage, imageinfopath, feats, imgNames)
     
+    # testSetTest (testSet, imageinfopath, feats, imgNames)
 
     
