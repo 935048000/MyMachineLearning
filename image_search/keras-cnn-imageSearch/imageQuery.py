@@ -26,6 +26,9 @@ def comdArgs():
 def getImageList(path):
     return [os.path.join (path, f) for f in os.listdir (path) if f.endswith ('.JPEG')]
 
+def getInfoFileList(path):
+    return [os.path.join (path, f) for f in os.listdir (path) if f.endswith ('.txt')]
+
 # 获取HDF5文件数据数量，便于追加和读取。
 def showHDF5Len(filename):
     # 文件不存在则重写，不追加
@@ -153,10 +156,10 @@ def testSetTest(testSet,imageinfopath,feats,imgNames):
     num = len (imageList)
     errorNum = 0
     
-    testErrorList = []
-    trainErrorList = []
-    testImgErrorList = []
-    trainImgErrorList = []
+    # testErrorList = []
+    # trainErrorList = []
+    # testImgErrorList = []
+    # trainImgErrorList = []
     
     for i in imageList:
         rank_ID, rank_score = featureSearch (i, feats)  # 获取图像得分信息
@@ -165,17 +168,22 @@ def testSetTest(testSet,imageinfopath,feats,imgNames):
         _imageInfo2 = getImageInfo (imList[0], imageinfopath)
         if _imageInfo1 != _imageInfo2:
             errorNum += 1
-            testErrorList.append (_imageInfo1)
-            trainErrorList.append (_imageInfo2)
-            testImgErrorList.append (i)
-            trainImgErrorList.append (imList[0])
+            # testErrorList.append (_imageInfo1)
+            # trainErrorList.append (_imageInfo2)
+            # testImgErrorList.append (i)
+            # trainImgErrorList.append (imList[0])
+            print ("测试集错误的图片信息： ", _imageInfo1)
+            print ("错误的图片最匹配的图片信息：", _imageInfo2)
+            print ("测试集错误的图片： ", i)
+            print ("错误的图片最匹配的图片：", imList[0])
+            print ("相似度评分：", scoresList)
     
     probability = errorNum / num
     print ("错误率: %.2f%%" % (probability*100))
-    print ("测试集错误的图片信息： ", testErrorList)
-    print ("错误的图片最匹配的图片信息：", trainErrorList)
-    print ("测试集错误的图片： ", testImgErrorList)
-    print ("错误的图片最匹配的图片：", trainImgErrorList)
+    # print ("测试集错误的图片信息： ", testErrorList)
+    # print ("错误的图片最匹配的图片信息：", trainErrorList)
+    # print ("测试集错误的图片： ", testImgErrorList)
+    # print ("错误的图片最匹配的图片：", trainImgErrorList)
     return 0
 
 # 显示搜索结果
@@ -197,7 +205,7 @@ def showSearchResult(resultnum,queryImage,imageinfopath,feats,imgNames):
 def main():
     feats, imgNames = readFeature (Model)
     
-    # showSearchResult (3, queryImage, imageinfopath, feats, imgNames)
+    showSearchResult (3, queryImage, imageinfopath, feats, imgNames)
     
     # testSetTest (testSet, imageinfopath, feats, imgNames)
     
@@ -210,10 +218,52 @@ if __name__ == '__main__':
     imageinfopath = "D:/datasets/imageinfo"
     Model = "./imageCNN.h5"
     # queryImage = "D:/datasets/trainingset1/19700102130430799.JPEG"
-    queryImage = "D:/datasets/001/19700102130428480.JPEG"
+    # queryImage = "D:/datasets/001/19700102130428480.JPEG"
     testSet = "D:/datasets/testingset"
-    
-    # main()
+    trainSet = "D:/datasets/trainset"
 
+    # imgList = getImageList(testSet)
+    #
+    # imgInfoList = getImageInfo(imgList,imageinfopath)
+    # print(imgInfoList[0])
+
+    # 统计图片信息类
+    # infoFileList = getInfoFileList(imageinfopath)
+    # infoFileInfo = []
+    # for i in infoFileList:
+    #     with open (i, 'r', encoding='utf-8') as f:
+    #         imageInfo = f.readline ().strip ("\n")
+    #         infoFileInfo.append(imageInfo)
+    # infoFileInfo = list (set (infoFileInfo))
+    #
+    # for j in range(len(infoFileInfo)):
+    #     with open("./imageinfoclass.txt",'a',encoding="utf-8") as ff:
+    #         ff.write(infoFileInfo[j]+"\n")
+
+    # 错误的图片
+    # imgList = []
+    # with open ("./image2info.txt", 'r', encoding='utf-8') as f:
+    #     image = f.readlines ()
+    #
+    # for i in image[::2]:
+    #     with open ("./image_search_error.txt", 'a', encoding='utf-8') as ff:
+    #         ff.write(i)
+
+    # 搜索错误列表中的图片
+    # with open ("./image_search_error.txt", 'r', encoding='utf-8') as f:
+    #     errorImage = f.readlines ()
+    #
+    # for i in errorImage[:10]:
+    #     queryImage = testSet + "/" + i.strip("\n")
+    #     main()
+    
+    pass
+
+
+    
+    
+    
+    
+    
 
 

@@ -54,10 +54,9 @@ def getImageName(imagefile):
 # print(getImageName(queryImage2))
 # print(queryImage2.split(".")[0])
 
-a = ["校车车库"]
-b = ["校车车库"]
-
-if a[0] != b[0]:
-    print("no")
+a = [[2,"啊"],[1,"吧"],[6,"才"],[3,"的"]]
+import operator
+a.sort(key=operator.itemgetter(1))
+print(a)
 
 

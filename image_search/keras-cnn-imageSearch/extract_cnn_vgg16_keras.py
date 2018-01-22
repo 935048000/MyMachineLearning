@@ -53,3 +53,4 @@ if __name__ == '__main__':
     # norm_feat = extract_feat(img_path)
     # print(norm_feat.shape)
 
+    
