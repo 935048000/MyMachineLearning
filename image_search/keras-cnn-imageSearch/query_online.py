@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-# Author: yongyuan.name
 from extract_cnn_vgg16_keras import extract_feat
 
 import numpy as np

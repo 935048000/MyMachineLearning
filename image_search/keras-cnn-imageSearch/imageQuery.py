@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-# Author: yongyuan.name
 from extract_cnn_vgg16_keras import extract_feat
 
 import numpy as np
@@ -8,29 +6,41 @@ import h5py
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import argparse
+import os
 
 
 # 命令行参数功能
-# ap = argparse.ArgumentParser()
-# ap.add_argument("-query", required = True,
-# 	help = "通往数据库的路径，其中包含要被索引的图像")
-# ap.add_argument("-index", required = True,
-# 	help = "路径指数")
-# ap.add_argument("-result", required = True,
-# 	help = "输出检索图像的路径")
-# args = vars(ap.parse_args())
-#
-# result = args['result']
-# Model = args[index'']
-# queryImage = args['query']
+def comdArgs():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("-image", required = True, help = "图像路径")
+    ap.add_argument("-f", required = True, help = "特征文件路径")
+    ap.add_argument("-result", required = True, help = "检索图像的路径")
+    args = vars(ap.parse_args())
+    
+    result = args['result']
+    Model = args['f']
+    queryImage = args['image']
+    return queryImage,Model,result
 
+# 返回目录中所有jpg图像的文件名列表。
+def getImageList(path):
+    return [os.path.join (path, f) for f in os.listdir (path) if f.endswith ('.JPEG')]
 
-# 显示
+# 获取HDF5文件数据数量，便于追加和读取。
+def showHDF5Len(filename):
+    # 文件不存在则重写，不追加
+    if not os.path.exists(filename):
+        return 0
+    # 存在则追加
+    with h5py.File (filename, 'r') as h5f:
+        return int(len(h5f)/2)
+
+# 显示图片：查询图，匹配结果图
 def showimage(queryImage, imlist, result):
     # 读取和显示查询图像
-    queryImg = mpimg.imread (queryImage)
+    _queryImg = mpimg.imread (queryImage)
     plt.title ("Query Image")
-    plt.imshow (queryImg)
+    plt.imshow (_queryImg)
     plt.show ()
     # 显示检索结果
     for i, im in enumerate (imlist):
@@ -42,65 +52,160 @@ def showimage(queryImage, imlist, result):
     return 0
 
 
-# 图片信息目录
-DirPath = "D:/datasets/testingset001/"
-result = "./imagesets"
-Model = "./image200CNN.h5"
+# 按指定格式读取h5文件
+def rH5FileData(Key,filename):
+    try:
+        with h5py.File (filename, 'r') as h5f:
+            feats = h5f["data" + str (Key)][:]
+            imgNames = h5f["name" + str (Key)][:]
+            return feats,imgNames[0].decode("utf-8")
+    except KeyError:
+        print("Read HDF5 File Key Error")
+        return 1
+
 
 # 读取索引图像的特征向量和相应的图像名称
-h5f = h5py.File (Model, 'r')
-feats = h5f['dataset_1'][:]
-imgNames = h5f['dataset_2'][:]
-h5f.close ()
+def readFeature(h5filename):
+    featsList = []
+    nameList = []
+    for i in range (showHDF5Len(h5filename)):
+        feats, imgNames = rH5FileData (i, h5filename)
+        featsList.append (feats)
+        nameList.append (imgNames)
+    featsArrayList = np.array (featsList)
+    return featsArrayList,nameList
 
-# queryImage = "./imagesets/19700102142532557.JPEG"
-# queryImage = "D:/datasets/testingset001/19700102141601727.JPEG"
-# queryImage = "D:/datasets/trainingset1/19700102130026909.JPEG"
-queryImage = "D:/datasets/002/19700102132424765.JPEG"
+# 获取图像文件名字,有文件类别后缀的。
+def getImageName(imagefile):
+    _temp = imagefile.split("/")[-1]
+    return _temp.split("\\")[-1]
 
-print ("原图为：", queryImage)
-queryImageName = queryImage[:-5]
-queryImageName = queryImageName + ".txt"
-with open (queryImageName, 'r', encoding='utf-8') as f:
-    print ("原图信息：", f.readline ())
+# 获取图像名字,无文件类别后缀的。
+def getImageName2(imagefile):
+    return imagefile.split(".")[0]
 
-# 提取查询图像的特征，计算 simlarity 评分和排序
-queryVec = extract_feat (queryImage)
-scores = np.dot (queryVec, feats.T)  # 计算点积（内积）,计算图像得分
-# 矩阵乘法并把（纵列）向量当作n×1 矩阵，点积还可以写为：a·b=a^T*b。
-# 点积越大，说明向量夹角越小。点积等于1，则向量为同向，向量夹角0度。
-rank_ID = np.argsort (scores)[::-1]  # 排序,倒序，大到小
-rank_score = scores[rank_ID]  # 计算评分
-# print("scores",scores,type(scores))
-# print ("rank_ID",rank_ID,type(rank_ID))
-# print ("rank_score",rank_score,type(rank_score))
+# 获取图像信息文件名
+def getImageTxtName(imagefile):
+    return imagefile+".txt"
+
+# 获取图像信息
+def getImageInfo(image,imagePath):
+    _imgInfoList = []
+    _imgList = []
+    def _getImageInfoList(imgList):
+        for i in imgList:
+            _image = getImageName (i)
+            _imageName = getImageName2 (_image)
+            _imageInfoFile = getImageTxtName (_imageName)
+            _imageInfoFile = imagePath + "/" + _imageInfoFile
+            with open (_imageInfoFile, 'r', encoding='utf-8') as f:
+                imageInfo = f.readline ().strip ("\n")
+            _imgInfoList.append(imageInfo)
+        return _imgInfoList
+    
+    
+    if type(image) != list:
+        _imgList.append(image)
+        _imgInfoList = _getImageInfoList(_imgList)
+        return _imgInfoList[0]
+    else:
+        _imgInfoList = _getImageInfoList (image)
+        return _imgInfoList
+    
+
+# 图像特征检索，计算匹配得分
+def featureSearch(queryImage,feats):
+    # 提取查询图像的特征，计算 simlarity 评分和排序
+    queryVec = extract_feat (queryImage)
+    scores = np.dot (queryVec, feats.T)  # 计算点积（内积）,计算图像得分
+    # 矩阵乘法并把（纵列）向量当作n×1 矩阵，点积还可以写为：a·b=a^T*b。
+    # 点积越大，说明向量夹角越小。点积等于1，则向量为同向，向量夹角0度。
+    rank_ID = np.argsort (scores)[::-1]  # 排序,倒序，大到小
+    rank_score = scores[rank_ID]  # 计算评分
+    # print("scores",scores,type(scores))
+    # print ("rank_ID",rank_ID,type(rank_ID))
+    # print ("rank_score",rank_score,type(rank_score))
+    return rank_ID,rank_score
 
 
 # 检索显示的相似度最高的图像数目
-maxres = 3  # 显示三个
-imList = []
-scoresList = []
-for i, index in enumerate (rank_ID[0:maxres]):
-    _temp = imgNames[index].decode ()
-    imList.append (_temp)
+def getSearchResult(maxres, imgNames, rank_ID, rank_score):
+    _imList = []
+    _scoresList = []
+    
+    # 生成图片列表
+    for i, index in enumerate (rank_ID[0:maxres]):
+        _temp = imgNames[index]
+        _imList.append (_temp)
+    
+    # 生成搜索得分列表
+    for j in rank_score[0:maxres]:
+        _temp = float ("%.2f" % (j * 100))
+        _scoresList.append (_temp)
+    
+    return _imList, _scoresList
 
-for j in rank_score[0:maxres]:
-    _temp = float ("%.2f" % (j * 100))
-    scoresList.append (_temp)
+def testSetTest():
+    resultnum = 2
+    imageList = getImageList (testSet)
+    probability = 00.00
+    num = len (imageList)
+    errorNum = 0
+    
+    testErrorList = []
+    trainErrorList = []
+    testImgErrorList = []
+    trainImgErrorList = []
+    
+    for i in imageList:
+        rank_ID, rank_score = featureSearch (i, feats)  # 获取图像得分信息
+        imList, scoresList = getSearchResult (resultnum, imgNames, rank_ID, rank_score)
+        _imageInfo1 = getImageInfo (i, imageinfopath)  # 获取图片信息
+        _imageInfo2 = getImageInfo (imList[0], imageinfopath)
+        if _imageInfo1 != _imageInfo2:
+            errorNum += 1
+            testErrorList.append (_imageInfo1)
+            trainErrorList.append (_imageInfo2)
+            testImgErrorList.append (i)
+            trainImgErrorList.append (imList[0])
+    
+    probability = errorNum / num
+    print ("错误率: %.2f%%" % (probability*100))
+    print ("测试集错误的图片信息： ", testErrorList)
+    print ("错误的图片最匹配的图片信息：", trainErrorList)
+    print ("\n\n")
+    print ("测试集错误的图片： ", testImgErrorList)
+    print ("错误的图片最匹配的图片：", trainImgErrorList)
 
-print ("最高的%d张图片为: " % maxres, imList)
 
-imgInfo = []
-for j in imList:
-    j = j[:-5]
-    j = j + ".txt"
-    fileName = DirPath + j
-    with open (fileName, 'r', encoding='utf-8') as f:
-        imgInfo.append (f.readline ().strip ("\n"))
+if __name__ == '__main__':
+    
+    # 相关参数
+    result = "./imagesets"
+    imageinfopath = "D:/datasets/imageinfo"
+    Model = "./imageCNN.h5"
+    # queryImage = "D:/datasets/trainingset1/19700102130430799.JPEG"
+    # queryImage = "D:/datasets/testingset/19700102130430799.JPEG"
+    testSet = "D:/datasets/testingset"
+    
+    
+    feats,imgNames = readFeature(Model)
+    
+    # rank_ID, rank_score = featureSearch(queryImage,feats)
+    
+    
+    
+    resultnum = 2
+    # imList, scoresList = getSearchResult(resultnum,imgNames,rank_ID,rank_score)
+    # imgInfoList = getImageInfo(imList,imageinfopath)
+    
+    # print ("原图为：", queryImage)
+    # print("原图信息",getImageInfo(queryImage,imageinfopath))
+    # print ("最高的%d张图片为: " % resultnum, imList)
+    # print ("最高%d张图片的相似度评分：" % resultnum, scoresList)
+    # print ("图片信息为: ", imgInfoList)
+    # showimage(queryImage,imList,result)
 
-print ("图片信息为: ", imgInfo)
+    
 
-print ("最高%d张图片的相似度评分：" % maxres, scoresList)
-
-
-# showimage(queryImage,imList,result)
+    

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-# Author: yongyuan.name
 import os
 import h5py
 import numpy as np

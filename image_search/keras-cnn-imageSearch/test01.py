@@ -45,4 +45,19 @@
 
 
 queryImage = "D:/datasets/002/19700102132424765.JPEG"
-print(queryImage.split("/")[-1])
+queryImage2 = "19700102132424765.JPEG"
+# print(queryImage.split("/")[-1])
+
+def getImageName(imagefile):
+    return imagefile.split("/")[-1]
+
+# print(getImageName(queryImage2))
+# print(queryImage2.split(".")[0])
+
+a = ["校车车库"]
+b = ["校车车库"]
+
+if a[0] != b[0]:
+    print("no")
+
+

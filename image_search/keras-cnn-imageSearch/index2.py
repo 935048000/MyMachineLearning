@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-# Author: yongyuan.name
 import os
 import h5py
 import numpy as np
@@ -9,6 +7,8 @@ from extract_cnn_vgg16_keras import extract_feat
 # from memory_profiler import profile
 from pyprind import ProgBar
 
+
+# class feature
 # 返回目录中所有jpg图像的文件名列表。
 def getImageList(path):
     return [os.path.join (path, f) for f in os.listdir (path) if f.endswith ('.JPEG')]
@@ -77,7 +77,7 @@ def etlFeature(post,img_list,h5filename):
     return 0
 
 
-# 获取HDF5文件数据数量，便于追加。
+# 获取HDF5文件数据数量，便于追加和读取。
 def showHDF5Len(filename):
     # 文件不存在则重写，不追加
     if not os.path.exists(filename):
