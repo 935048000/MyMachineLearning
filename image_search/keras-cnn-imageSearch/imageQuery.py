@@ -194,6 +194,15 @@ def showSearchResult(resultnum,queryImage,imageinfopath,feats,imgNames):
     # showimage(queryImage,imList,result)
     return 0
 
+def main():
+    feats, imgNames = readFeature (Model)
+    
+    # showSearchResult (3, queryImage, imageinfopath, feats, imgNames)
+    
+    # testSetTest (testSet, imageinfopath, feats, imgNames)
+    
+    
+
 if __name__ == '__main__':
     
     # 相关参数
@@ -204,11 +213,7 @@ if __name__ == '__main__':
     queryImage = "D:/datasets/001/19700102130428480.JPEG"
     testSet = "D:/datasets/testingset"
     
-    
-    feats,imgNames = readFeature(Model)
+    # main()
 
-    showSearchResult (3, queryImage, imageinfopath, feats, imgNames)
-    
-    # testSetTest (testSet, imageinfopath, feats, imgNames)
 
-    
+
