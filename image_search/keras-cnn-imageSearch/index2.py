@@ -97,7 +97,7 @@ def main():
 
 
 if __name__ == "__main__":
-
+    pass
     # feats = []
     # 数据文件
     # h5filename = "./imageCNNModel_03.h5"

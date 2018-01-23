@@ -207,6 +207,7 @@ def main():
     
     showSearchResult (3, queryImage, imageinfopath, feats, imgNames)
     
+    
     # testSetTest (testSet, imageinfopath, feats, imgNames)
     
     
@@ -259,9 +260,8 @@ if __name__ == '__main__':
     
     pass
 
-
-    
-    
+    queryImage = "D:/datasets/trainset/20150630183252485.JPEG"
+    main()
     
     
     
