@@ -188,7 +188,7 @@ def testSetTest(testSet,imageinfopath,feats,imgNames):
 
 # 显示搜索结果
 def showSearchResult(resultnum,queryImage,imageinfopath,feats,imgNames):
-    # resultnum = 2
+
     rank_ID, rank_score = featureSearch(queryImage,feats)
     imList, scoresList = getSearchResult(resultnum,imgNames,rank_ID,rank_score)
     imgInfoList = getImageInfo(imList,imageinfopath)
@@ -260,7 +260,7 @@ if __name__ == '__main__':
     
     pass
 
-    queryImage = "D:/datasets/trainset/20150630183252485.JPEG"
+    queryImage = "D:/datasets/testingset/20150630152018514.JPEG"
     main()
     
     

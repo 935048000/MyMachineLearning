@@ -87,27 +87,30 @@ def showHDF5Len(filename):
         return int(len(h5f)/2)
 
 
-def main():
-    feats = []
-    h5filename = "./imageCNN.h5"
-    dataset = ""
-    img_list = getImageList(dataset)
-    etlFeature (showHDF5Len (h5filename), img_list, h5filename)
-    return 0
+# def main():
+#     feats = []
+#     h5filename = "./imageCNN.h5"
+#     dataset = ""
+#     img_list = getImageList(dataset)
+#     etlFeature (showHDF5Len (h5filename), img_list, h5filename)
+#     return 0
 
 
 if __name__ == "__main__":
     pass
-    # feats = []
+    feats = []
     # 数据文件
-    # h5filename = "./imageCNNModel_03.h5"
+    h5filename = "./imageCNN2.h5"
 
 
     # 文件条数
     # lens = showHDF5Len (h5filename)
     # print(lens)
-
-
+    import keras-cnn-imageSearch
+    
+    b = base()
+    img_list = b.getImageList("学二公寓西")
+    print(img_list)
     # etlFeature (showHDF5Len (h5filename), img_list, h5filename)
 
 
