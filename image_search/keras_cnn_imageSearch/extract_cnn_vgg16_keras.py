@@ -24,7 +24,8 @@ def extract_feat(img_path):
     model = VGG16(weights = 'imagenet', input_shape = (input_shape[0],input_shape[1],input_shape[2]), pooling = 'max', include_top = False)
     # model = VGG16(input_shape = (input_shape[0],input_shape[1],input_shape[2]), pooling = 'max', include_top = False)
 
-    img = image.load_img(img_path, target_size=(input_shape[0], input_shape[1]))
+    # interpolation = "nearest", "bilinear","bicubic","lanczos","box","hamming"
+    img = image.load_img(img_path, target_size=(input_shape[0], input_shape[1]),interpolation="lanczos")
     img = image.img_to_array(img)
     img = np.expand_dims(img, axis=0)
     img = preprocess_input(img)

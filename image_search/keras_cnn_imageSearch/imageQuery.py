@@ -217,7 +217,8 @@ if __name__ == '__main__':
     # 相关参数
     result = "./imagesets"
     imageinfopath = "D:/datasets/imageinfo"
-    Model = "./imageCNN.h5"
+    # Model = "./imageCNN.h5"
+    # Model = "./imageCNN2.h5"
     # queryImage = "D:/datasets/trainingset1/19700102130430799.JPEG"
     # queryImage = "D:/datasets/001/19700102130428480.JPEG"
     testSet = "D:/datasets/testingset"
@@ -259,9 +260,15 @@ if __name__ == '__main__':
     #     main()
     
     pass
-
+    from image_search.keras_cnn_imageSearch.base import base
+    b = base ()
+    h5List = b.getFileList("./","h5")
+    
     queryImage = "D:/datasets/testingset/20150630152018514.JPEG"
-    main()
+    for i in h5List[1:]:
+        Model = i
+        print(i)
+        main()
     
     
     

@@ -7,7 +7,7 @@ import os
 from pyprind import ProgBar
 import time
 
-class base():
+class base(object):
     """
     这是一个基础方法类，封装常用方法。
     """
@@ -42,3 +42,7 @@ class base():
                 imgLists.append (_tt[1])
     
         return imgLists
+    
+
+if __name__ == '__main__':
+    pass
