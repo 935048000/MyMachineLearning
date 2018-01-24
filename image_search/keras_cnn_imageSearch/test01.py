@@ -76,11 +76,11 @@ im = "D:/datasets/trainset/20150716154609131.JPEG"
 # # cv2.imshow()
 
 
-image=cv2.imread(dirfile)
-res=cv2.resize(image,(272,480),interpolation=cv2.INTER_LINEAR)
-cv2.imshow('iker',res)
+# image=cv2.imread(dirfile)
+# res=cv2.resize(image,(272,480),interpolation=cv2.INTER_AREA)
+# cv2.imshow('iker',res)
 # cv2.imshow('image',image)
-cv2.waitKey(0)
+# cv2.waitKey(0)
 # cv2.imwrite('12345.JPEG',res)
 # cv2.destroyWindow()
 

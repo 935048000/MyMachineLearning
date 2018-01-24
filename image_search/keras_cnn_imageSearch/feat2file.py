@@ -100,7 +100,7 @@ if __name__ == "__main__":
     pass
     feats = []
     # 数据文件
-    h5filename = "./imageCNN_hamming.h5"
+    h5filename = "./imageCNN4.h5"
 
 
     # 文件条数
@@ -111,13 +111,14 @@ if __name__ == "__main__":
     from image_search.keras_cnn_imageSearch.base import base
     b = base()
     
-    img_list1 = b.getImageList("学二公寓西")
-    img_list2 = b.getImageList ("教三楼南广场")
-    img_list = img_list1 + img_list2
-    print(len(img_list))
+    h5filename = "./imageCNN4_1.h5"
+    img_list = b.getFileList("./temp_image1","JPEG")
     etlFeature (showHDF5Len (h5filename), img_list, h5filename)
 
-
+    pass
+    h5filename = "./imageCNN4_2.h5"
+    img_list = b.getFileList ("./temp_image2", "JPEG")
+    etlFeature (showHDF5Len (h5filename), img_list, h5filename)
 
 
 
