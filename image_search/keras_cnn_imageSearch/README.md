@@ -7,7 +7,8 @@ In [1]: import keras
 Using Theano backend.
 ```
 
-keras 2.0.1 及 2.0.5 版本均经过测试可用。推荐Python 2.7，Python 3.x的未经过测试。
+keras 2.0.1 及 2.0.5 版本均经过测试可用。
+推荐Python 3.x
 
 此外需要numpy, matplotlib, os, h5py, argparse. 推荐使用anaconda安装
 
@@ -32,22 +33,13 @@ keras 2.0.1 及 2.0.5 版本均经过测试可用。推荐Python 2.7，Python 3.
 #### 示例
 
 ```sh
-# 对database文件夹内图片进行特征提取，建立索引文件featureCNN.h5
-C:\Users\pop\Desktop\python\MyMachineLearning\image_search\flask-keras-cnn-image-retrievalmaster
-C:\Python\Python36\python.exe
-python index.py -database database -index featureCNN.h5
-C:\Python\Python36\python.exe index.py -database imagesets -index youdianCNN.h5
-# 使用database文件夹内001_accordion_image_0001.jpg作为测试图片，在database内以featureCNN.h5进行近似图片查找，并显示最近似的3张图片
-python query_online.py -query database/001_accordion_image_0001.jpg -index featureCNN.h5 -result database
-C:\Python\Python36\python.exe query_online.py -query imagesets/19700102130428480.JPEG -index youdianCNN.h5 -result imagesets
+# 对database文件夹内图片进行特征提取，建立索引文件 imageCNN.h5
+C:\Users\pop\Desktop\python\MyMachineLearning\image_search\keras_cnn_imageSearch
+
+C:\Python\Python36\python.exe index.py -database imagesets -index imageCNN.h5
+
+# 使用database文件夹内001_accordion_image_0001.jpg作为测试图片，在database内以 imageCNN.h5 进行近似图片查找，并显示最近似的3张图片
+python query_online.py -query database/001_accordion_image_0001.jpg -index imageCNN.h5 -result database
+C:\Python\Python36\python.exe imageQyery.py -query imagesets/19700102130428480.JPEG -index youdianCNN.h5 -result imagesets
 
 ```
-
-
-### 更新
-
-- 针对近期有小伙伴反映的keras版本的问题，已将其进行到最新版本，并且特征提取代码大幅精简。
-- 显示检索得到的图片， 可自由定义查询图片及检索图片集
-
-### Goal
-重新用flask写CNN-Web-Demo-for-Image-Retrieval，并使用keras使它支持在线上传功能。
