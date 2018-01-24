@@ -29,10 +29,11 @@ class base(object):
     def getImageTxtName(self,imagefile):
         return imagefile + ".txt"
 
-    def getImageList(self,class_name):
+    # 提取同类的图片
+    def getImageList(self,filename,class_name):
         imgLists = []
     
-        with open ("./image_link_info.txt", "r", encoding="utf-8") as f:
+        with open (filename, "r", encoding="utf-8") as f:
             _temp = f.readlines ()
     
         for i in range (len (_temp)):
