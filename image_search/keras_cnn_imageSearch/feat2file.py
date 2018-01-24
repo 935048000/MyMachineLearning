@@ -111,14 +111,14 @@ if __name__ == "__main__":
     from image_search.keras_cnn_imageSearch.base import base
     b = base()
     
-    h5filename = "./imageCNN4_1.h5"
-    img_list = b.getFileList("./temp_image1","JPEG")
-    etlFeature (showHDF5Len (h5filename), img_list, h5filename)
-
-    pass
-    h5filename = "./imageCNN4_2.h5"
-    img_list = b.getFileList ("./temp_image2", "JPEG")
-    etlFeature (showHDF5Len (h5filename), img_list, h5filename)
+    # h5filename = "./imageCNN4_1.h5"
+    # img_list = b.getFileList("./temp_image1","JPEG")
+    # etlFeature (showHDF5Len (h5filename), img_list, h5filename)
+    #
+    # pass
+    # h5filename = "./imageCNN4_2.h5"
+    # img_list = b.getFileList ("./temp_image2", "JPEG")
+    # etlFeature (showHDF5Len (h5filename), img_list, h5filename)
 
 
 

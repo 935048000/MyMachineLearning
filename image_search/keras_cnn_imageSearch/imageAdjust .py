@@ -13,11 +13,9 @@ class imgchange():
         
         # 读取图片
         image_raw_data = tf.gfile.FastGFile (imagefile1, 'rb').read ()
-        
         # 解码
         img_data = tf.image.decode_jpeg (image_raw_data)
-        
-        
+
         # 重新调整图片大小
         with tf.Session () as sess:
             resized = tf.image.resize_images (img_data, [h,w], method=3)
@@ -37,10 +35,6 @@ class imgchange():
             # plt.imshow (cat)
             # plt.show ()
         return 0
-
-    # 返回目录中所有jpg图像的文件名列表。
-    def getImageList(self,path):
-        return [os.path.join (path, f) for f in os.listdir (path) if f.endswith ('.JPEG')]
 
     def ichange2(self,imageFile1,imageFile2,h,w):
         image = cv2.imread (imageFile1)
@@ -97,4 +91,5 @@ if __name__ == '__main__':
     
     pass
     
-    # c.ichange ("D:/datasets/trainset/20150630183252485.JPEG", "./123.JPEG", 272, 480)
+    # c.ichange ("D:/datasets/testingset/20150630152018514.JPEG", "./20150630152018514.JPEG", 480, 272)
+    # c.ichange2 ("D:/datasets/testingset/20150630152018514.JPEG", "./20150630152018514.JPEG", 480, 272)

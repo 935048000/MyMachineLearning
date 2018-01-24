@@ -4,7 +4,8 @@ from numpy import linalg as LA
 from keras.applications.vgg16 import VGG16
 from keras.preprocessing import image
 from keras.applications.vgg16 import preprocess_input
-
+from PIL import Image
+from cv2 import imread,resize,cvtColor,COLOR_BGR2RGB,INTER_AREA,imshow
 
 '''
 VGG16模型,权重由ImageNet训练而来
@@ -21,15 +22,26 @@ def extract_feat(img_path):
     # include_top：是否保留顶层的3个全连接网络
     
     input_shape = (272, 480, 3)
-    model = VGG16(weights = 'imagenet', input_shape = (input_shape[0],input_shape[1],input_shape[2]), pooling = 'max', include_top = False)
-    # model = VGG16(input_shape = (input_shape[0],input_shape[1],input_shape[2]), pooling = 'max', include_top = False)
+    # model = VGG16(weights = 'imagenet', input_shape = (input_shape[0],input_shape[1],input_shape[2]), pooling = 'max', include_top = False)
+    model = VGG16(input_shape = (input_shape[0],input_shape[1],input_shape[2]), pooling = 'max', include_top = False)
 
-    # interpolation = "nearest", "bilinear","bicubic","lanczos","box","hamming"
-    img = image.load_img(img_path, target_size=(input_shape[0], input_shape[1]),interpolation="lanczos")
+    # 方法1，使用PIL的image方法进行图像插值，使图像符合模型定义的形状。
+    # 插值模式 interpolation = "nearest", "bilinear","bicubic","lanczos","box","hamming"
+    # img = image.load_img(img_path, target_size=(input_shape[0], input_shape[1]),interpolation="lanczos")
+    # Image._show(img)
+    # print(Image._conv_type_shape(img))
+
+    # 方法2，使用opencv的resize方法进行图像插值，使图像符合模型定义的形状。
+    _img = imread (img_path)
+    res = resize (_img, (input_shape[1], input_shape[0]), interpolation=INTER_AREA)
+    img = Image.fromarray (cvtColor (res, COLOR_BGR2RGB))
+    # print (Image._conv_type_shape (img))
+    
     img = image.img_to_array(img)
     img = np.expand_dims(img, axis=0)
     img = preprocess_input(img)
     feat = model.predict(img)
+    
     # 归一化
     norm_feat = feat[0]/LA.norm(feat[0])
     return norm_feat
@@ -51,7 +63,8 @@ if __name__ == '__main__':
     # print(norm_feat.shape)
     # print(feats.shape)
 
-    # norm_feat = extract_feat(img_path)
+    img_path = "D:/datasets/testingset/20150630152018514.JPEG"
+    norm_feat = extract_feat(img_path)
     # print(norm_feat.shape)
 
     
