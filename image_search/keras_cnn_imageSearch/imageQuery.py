@@ -199,13 +199,13 @@ def showSearchResult(resultnum,queryImage,imageinfopath,feats,imgNames):
     print ("最高%d张图片的相似度评分：" % resultnum, scoresList)
     print ("图片信息为: ", imgInfoList)
     
-    # showimage(queryImage,imList,result)
+    showimage(queryImage,imList,result)
     return 0
 
 def main():
     feats, imgNames = readFeature (Model)
     
-    showSearchResult (5, queryImage, imageinfopath, feats, imgNames)
+    showSearchResult (3, queryImage, imageinfopath, feats, imgNames)
     
     
     # testSetTest (testSet, imageinfopath, feats, imgNames)
@@ -215,10 +215,10 @@ def main():
 if __name__ == '__main__':
     
     # 相关参数
-    result = "./imagesets"
+    result = "D:/datasets/trainset"
     imageinfopath = "D:/datasets/imageinfo"
     # Model = "./imageCNN.h5"
-    Model = "./model/imageCNN4_2.h5"
+    Model = "./model/imageCNN6442.h5"
     # queryImage = "D:/datasets/trainingset1/19700102130430799.JPEG"
     # queryImage = "D:/datasets/001/19700102130428480.JPEG"
     testSet = "D:/datasets/testingset"
@@ -263,10 +263,7 @@ if __name__ == '__main__':
     # from image_search.keras_cnn_imageSearch.base import base
     # b = base ()
     
-    queryImage = "D:/datasets/testingset/20150630152018514.JPEG"
-    main()
-    
-    queryImage = "./20150630152018514.JPEG"
+    queryImage = "D:/datasets/testingset/20150702184829417.JPEG"
     main()
     
     

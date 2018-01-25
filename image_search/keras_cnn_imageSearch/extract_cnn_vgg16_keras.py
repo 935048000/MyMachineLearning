@@ -36,6 +36,7 @@ def extract_feat(img_path):
     res = resize (_img, (input_shape[1], input_shape[0]), interpolation=INTER_AREA)
     img = Image.fromarray (cvtColor (res, COLOR_BGR2RGB))
     # print (Image._conv_type_shape (img))
+    # img.show()
     
     img = image.img_to_array(img)
     img = np.expand_dims(img, axis=0)
