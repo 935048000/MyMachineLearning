@@ -35,6 +35,21 @@ def rH5FileData(Key,filename):
         print("Read HDF5 File Key Error")
         return 1
 
+def rH5FileData2(Key1, key2, filename):
+    NameList = []
+    featsArrayList = []
+    try:
+        with h5py.File (filename, 'r') as h5f:
+            feats = h5f[Key1][:]
+            imgNames = h5f[key2][:]
+            for i in imgNames:
+                NameList.append(i.decode("utf-8"))
+            featsArrayList = np.array (feats)
+            return featsArrayList, NameList
+    except KeyError:
+        print ("Read HDF5 File Key Error")
+        return 1
+
 
 # 按指定格式写入h5文件
 def wH5FileData(Key,feats,names,filename):
@@ -53,6 +68,23 @@ def wH5FileData(Key,feats,names,filename):
         raise NameError('Unable to create link (name already exists)')
     return 0
 
+
+# 按指定格式写入h5文件
+def wH5FileData2(Key1,Key2,feats,names,filename):
+    namess = []
+    # 数据编码转换
+    if type(names) is list:
+        for j in names:
+            namess.append (j.encode ())
+    else:
+        names.encode ()
+    try:
+        with h5py.File (filename, 'a') as h5f:
+            h5f.create_dataset (Key1, data=feats)
+            h5f.create_dataset (Key2, data=namess)
+    except RuntimeError:
+        raise NameError('Unable to create link (name already exists)')
+    return 0
 
 # 提取特征并写入文件
 # @profile (precision=6)
@@ -100,7 +132,7 @@ if __name__ == "__main__":
     pass
     feats = []
     # 数据文件
-    h5filename = "./imageCNN4.h5"
+    h5filename = "./model/imageCNN6442.h5"
 
 
     # 文件条数
@@ -121,11 +153,22 @@ if __name__ == "__main__":
     # etlFeature (showHDF5Len (h5filename), img_list, h5filename)
 
 
-
+    # featsList = []
+    # nameList = []
     # for i in range (showHDF5Len (h5filename)):
     #     feats, imgNames = rH5FileData (i, h5filename)
-    #     print(imgNames)
+    #     featsList.append (feats)
+    #     nameList.append (imgNames)
+    #
+    #
+    # print(showHDF5Len (h5filename))
+    #
+    # wH5FileData2 ("feature", "imagename", featsList, nameList, "./model/imageCNNAll.h5")
 
+    # print(showHDF5Len ("./model/imageCNNAll.h5"))
+
+    # feats, imgNames = rH5FileData2 ("feature", "imagename", "./model/imageCNNAll.h5")
+    # print(len(imgNames))
 
     # 读取数据
     # featsList = []
@@ -135,9 +178,9 @@ if __name__ == "__main__":
     #     featsList.append (feats)
     #     nameList.append (imgNames)
 
-    # queryVec = extract_feat("./image/19700102125648863.JPEG")
+    # queryVec = extract_feat("D:/datasets/testingset1-1/19700102125648863.JPEG")
     # featsList = np.array(featsList)
-    # scores = np.dot(queryVec, featsList.T)
+    # scores = np.dot(queryVec, feats.T)
     # rank_ID = np.argsort(scores)[::-1] # 排序,倒序，大到小
     # rank_score = scores[rank_ID] # 计算评分
     # print(rank_score)

@@ -67,6 +67,21 @@ def rH5FileData(Key,filename):
         print("Read HDF5 File Key Error")
         return 1
 
+def rH5FileData2(Key1, key2, filename):
+    NameList = []
+    featsArrayList = []
+    try:
+        with h5py.File (filename, 'r') as h5f:
+            feats = h5f[Key1][:]
+            imgNames = h5f[key2][:]
+            for i in imgNames:
+                NameList.append (i.decode ("utf-8"))
+            featsArrayList = np.array (feats)
+            return featsArrayList, NameList
+    except KeyError:
+        print ("Read HDF5 File Key Error")
+        return 1
+
 
 # 读取索引图像的特征向量和相应的图像名称
 def readFeature(h5filename):
@@ -188,26 +203,40 @@ def testSetTest(testSet,imageinfopath,feats,imgNames):
     return 0
 
 # 显示搜索结果
-def showSearchResult(resultnum,queryImage,imageinfopath,feats,imgNames):
-
+def showSearchResult(resultnum,queryImage,ModelFile,imageinfopath):
+    start2 = time.time ()
+    outputInfo = ""
+    feats, imgNames = rH5FileData2 ("feature", "imagename", ModelFile)
     rank_ID, rank_score = featureSearch(queryImage,feats)
     imList, scoresList = getSearchResult(resultnum,imgNames,rank_ID,rank_score)
     imgInfoList = getImageInfo(imList,imageinfopath)
+    _imageInfo = getImageInfo (queryImage, imageinfopath)  # 获取图片信息
+    # if _imageInfo == imgInfoList[0]:
+    #     outputInfo = "完美匹配！"
+    # elif _imageInfo == imgInfoList[1]:
+    #     outputInfo = "次要匹配！"
+    # else:
+    #     outputInfo = "匹配失败！"
+        
     
-    print ("原图为：", queryImage)
-    print("原图信息",getImageInfo(queryImage,imageinfopath))
-    print ("最高的%d张图片为: " % resultnum, imList)
-    print ("最高%d张图片的相似度评分：" % resultnum, scoresList)
+    print ("原图为  :", queryImage)
+    print ("原图信息:",_imageInfo)
+    print ("最高相似度的%d张图片为: " % resultnum, imList)
+    print ("最高%d张图片的评分：" % resultnum, scoresList)
     print ("图片信息为: ", imgInfoList)
+    # print ("搜索结果 ：",outputInfo)
+    print ("本次查询搜索总耗时(秒)：%.2f s" % (time.time () - start2))
     
     # showimage(queryImage,imList,result)
     return 0
 
 # @profile (precision=6)
 def main():
-    feats, imgNames = readFeature (Model)
+
+    # feats, imgNames = readFeature (Model)
     
-    showSearchResult (3, queryImage, imageinfopath, feats, imgNames)
+
+    showSearchResult (3, queryImage, Model, imageinfopath)
     
     
     # testSetTest (testSet, imageinfopath, feats, imgNames)
@@ -219,8 +248,8 @@ if __name__ == '__main__':
     # 相关参数
     result = "D:/datasets/trainset"
     imageinfopath = "D:/datasets/imageinfo"
-    # Model = "./imageCNN.h5"
-    Model = "./model/imageCNN6442.h5"
+    Model = "./model/imageCNNAll.h5"
+    # Model = "./model/imageCNN6442.h5"
     # queryImage = "D:/datasets/trainingset1/19700102130430799.JPEG"
     # queryImage = "D:/datasets/001/19700102130428480.JPEG"
     testSet = "D:/datasets/testingset"
@@ -266,15 +295,12 @@ if __name__ == '__main__':
     # b = base ()
     
 
-    queryImage = "D:/datasets/testingset1-1/19700102125648863.JPEG"
+    queryImage = "D:/datasets/testingset/20150630163114680.JPEG"
     # queryImage = "./19700102125648863.JPEG"
 
-
-    start = time.time()
-    
     main()
     
-    print(time.time() - start)
+    
     
     
     
