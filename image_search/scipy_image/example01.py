@@ -12,10 +12,10 @@ def imageSearch(matches):
     # print('good', len (good))
     return (len (good))
 
-def imagess(image1,image2,image3):
+def imagess(image1,image2):
     img1 = cv2.imread (image1,0)
     img2 = cv2.imread (image2, 0)
-    img3 = cv2.imread (image3, 0)
+    # img3 = cv2.imread (image3, 0)
 
     # 启动 SIFT
     sift = cv2.xfeatures2d.SIFT_create ()
@@ -23,7 +23,7 @@ def imagess(image1,image2,image3):
     DES = []
     # 使用SIFT找到关键点和描述符
     kp1, des1 = sift.detectAndCompute (img1, None)
-    # kp2, des2 = sift.detectAndCompute (img2, None)
+    kp2, des2 = sift.detectAndCompute (img2, None)
     # DES.append(des2)
     # kp3, des3 = sift.detectAndCompute (img3, None)
     # DES.append(des3)
@@ -45,10 +45,10 @@ def imagess(image1,image2,image3):
 
     # 矩阵读写文件
     # np.savetxt ("./test.txt", des2)
-    des4 = np.loadtxt ("./test.txt", dtype=float)
+    # des4 = np.loadtxt ("./test.txt", dtype=float)
 
     # float64 --》 float32
-    des4 = np.float32(des4)
+    # des4 = np.float32(des4)
 
     # 矩阵比较
     # if (des4 == des2).all():
@@ -60,7 +60,7 @@ def imagess(image1,image2,image3):
     #
 
 
-    matches = flann.knnMatch (des1, des4, k=2)
+    matches = flann.knnMatch (des1, des2, k=2)
     print ("匹配度： ",imageSearch (matches))
 
 
@@ -91,9 +91,26 @@ def showImage(img1,img2,kp1,kp2,good):
     cv2.waitKey ()
 
 if __name__ == '__main__':
-    image1 = './test01/5.JPEG'
-    image2 = './test01/6.JPEG'
-    image3 = './test01/1.JPG'
+    # image1 = './test01/5.JPEG'
+    # image2 = './test01/6.JPEG'
+    # image3 = './test01/1.JPG'
+    testingset = "D:/datasets/testingset/"
+    trainingset = "D:/datasets/trainset/"
+    
+    img1 = "19700102141330294.JPEG"
+    img2 = "19700102141916383.JPEG"
+    img3 = "19700102143524158.JPEG"
+    img0 = "19700102140046412.JPEG"
 
-    imagess(image1,image2,image3)
+    image1 = testingset + img1
+    image0 = testingset + img0
+    image2 = trainingset + img2
+    image3 = trainingset + img3
+    
 
+    # imagess (image1, image2)
+    # imagess (image1, image3)
+    # imagess (image1, image0)
+    imagess ("D:/datasets/testingset/20150630152018514.JPEG", "D:/datasets/testingset/20150630152018514.JPEG")
+    imagess ("D:/datasets/testingset/20150630152018514.JPEG", "D:/datasets/trainset/20150630144516827.JPEG")
+    imagess ("D:/datasets/testingset/20150630152018514.JPEG", "D:/datasets/trainset/20150630151139490.JPEG")
