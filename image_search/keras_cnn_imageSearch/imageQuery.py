@@ -3,11 +3,12 @@ from extract_cnn_vgg16_keras import extract_feat
 import numpy as np
 import h5py
 
-import matplotlib.pyplot as plt
-import matplotlib.image as mpimg
+from matplotlib import pyplot as plt
+from matplotlib import image as mpimg
 import argparse
 import os
-
+import time
+from memory_profiler import profile
 
 # 命令行参数功能
 def comdArgs():
@@ -199,9 +200,10 @@ def showSearchResult(resultnum,queryImage,imageinfopath,feats,imgNames):
     print ("最高%d张图片的相似度评分：" % resultnum, scoresList)
     print ("图片信息为: ", imgInfoList)
     
-    showimage(queryImage,imList,result)
+    # showimage(queryImage,imList,result)
     return 0
 
+# @profile (precision=6)
 def main():
     feats, imgNames = readFeature (Model)
     
@@ -263,8 +265,17 @@ if __name__ == '__main__':
     # from image_search.keras_cnn_imageSearch.base import base
     # b = base ()
     
-    queryImage = "D:/datasets/testingset/20150702184829417.JPEG"
+
+    queryImage = "D:/datasets/testingset1-1/19700102125648863.JPEG"
+    # queryImage = "./19700102125648863.JPEG"
+
+
+    start = time.time()
+    
     main()
+    
+    print(time.time() - start)
+    
     
     
     
