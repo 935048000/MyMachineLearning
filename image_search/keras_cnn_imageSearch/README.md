@@ -12,6 +12,8 @@ keras 2.0.1 及 2.0.5 版本均经过测试可用。
 
 此外需要numpy, matplotlib, os, h5py, argparse. 推荐使用anaconda安装
 
+https://github.com/willard-yuan/flask-keras-cnn-image-retrieval
+
 ### 使用
 
 - 步骤一
