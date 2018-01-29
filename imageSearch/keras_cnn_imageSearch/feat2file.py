@@ -140,7 +140,7 @@ if __name__ == "__main__":
     # print(lens)
 
 
-    from image_search.keras_cnn_imageSearch.base import base
+    from imageSearch.keras_cnn_imageSearch.base import base
     b = base()
     
     # h5filename = "./imageCNN4_1.h5"

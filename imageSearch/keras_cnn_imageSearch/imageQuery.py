@@ -291,7 +291,7 @@ if __name__ == '__main__':
     #     main()
     
     pass
-    # from image_search.keras_cnn_imageSearch.base import base
+    # from imageSearch.keras_cnn_imageSearch.base import base
     # b = base ()
     
 
