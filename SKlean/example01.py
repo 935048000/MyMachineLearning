@@ -326,18 +326,15 @@ def DecisionTrees():
 # DecisionTrees()
 
 
-# import matplotlib.pyplot as plt
-# import numpy as np
-
-
+# 基尼系数
 def gini(p):
     return (p) * (1 - (p)) + (1 - p) * (1 - (1 - p))
 
-
+# 熵
 def entropy(p):
     return - p * np.log2 (p) - (1 - p) * np.log2 ((1 - p))
 
-
+# 误差
 def error(p):
     return 1 - np.max ([p, 1 - p])
 
