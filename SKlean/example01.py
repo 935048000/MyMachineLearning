@@ -402,10 +402,7 @@ def randomForests():
 # randomForests()
 
 
-# # k最近的邻居-一个懒惰的学习算法。
-
-
-
+#k最近的邻居-一个懒惰的学习算法。
 def KNN():
     knn = KNeighborsClassifier (n_neighbors=5, p=2, metric='minkowski')
     knn.fit (X_train_std, y_train)
