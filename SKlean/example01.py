@@ -24,7 +24,7 @@ from sklearn.neighbors import KNeighborsClassifier
 iris = datasets.load_iris ()
 X = iris.data[:, [2, 3]]
 y = iris.target
-print ('类标签:', np.unique (y))
+# print ('类标签:', np.unique (y))
 
 # 将数据分为70%的培训和30%的测试数据:
 X_train, X_test, y_train, y_test = train_test_split (
