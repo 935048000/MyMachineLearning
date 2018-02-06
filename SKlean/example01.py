@@ -30,7 +30,7 @@ print ('类标签:', np.unique (y))
 X_train, X_test, y_train, y_test = train_test_split (
     X, y, test_size=0.3, random_state=0)
 
-# 标准化的特点:
+# 标准化的特征:
 sc = StandardScaler ()
 sc.fit (X_train)
 X_train_std = sc.transform (X_train)
@@ -200,10 +200,10 @@ def Regularization():
     
     weights = np.array (weights)
     plt.plot (params, weights[:, 0],
-              label='petal length')
+              label='花瓣长度')
     plt.plot (params, weights[:, 1], linestyle='--',
-              label='petal width')
-    plt.ylabel ('weight coefficient')
+              label='花瓣宽度')
+    plt.ylabel ('权重系数')
     plt.xlabel ('C')
     plt.legend (loc='upper left')
     plt.xscale ('log')
@@ -220,8 +220,8 @@ def SVM():
     
     plot_decision_regions (X_combined_std, y_combined,
                            classifier=svm, test_idx=range (105, 150))
-    plt.xlabel ('petal length [standardized]')
-    plt.ylabel ('petal width [standardized]')
+    plt.xlabel ('花瓣长度(标准化)')
+    plt.ylabel ('花瓣宽(标准化)')
     plt.legend (loc='upper left')
     plt.tight_layout ()
     # plt.savefig('./figures/support_vector_machine_linear.png', dpi=300)
@@ -316,14 +316,14 @@ def DecisionTrees():
     plot_decision_regions (X_combined, y_combined,
                            classifier=tree, test_idx=range (105, 150))
     
-    plt.xlabel ('petal length [cm]')
-    plt.ylabel ('petal width [cm]')
+    plt.xlabel ('花瓣长度(厘米)')
+    plt.ylabel ('花瓣宽(厘米)')
     plt.legend (loc='upper left')
     plt.tight_layout ()
     # plt.savefig('./figures/decision_tree_decision.png', dpi=300)
     plt.show ()
 
-# DecisionTrees()
+DecisionTrees()
 
 
 # 基尼系数
@@ -348,8 +348,8 @@ def PlotHEE():
     fig = plt.figure ()
     ax = plt.subplot (111)
     for i, lab, ls, c, in zip ([ent, sc_ent, gini (x), err],
-                               ['Entropy', 'Entropy (scaled)',
-                                'Gini Impurity', 'Misclassification Error'],
+                               ['熵', '熵(比例)',
+                                '基尼不纯度', '误分率'],
                                ['-', '-', '--', '-.'],
                                ['black', 'lightgray', 'red', 'green', 'cyan']):
         line = ax.plot (x, i, label=lab, linestyle=ls, lw=2, color=c)
@@ -361,7 +361,7 @@ def PlotHEE():
     ax.axhline (y=1.0, linewidth=1, color='k', linestyle='--')
     plt.ylim ([0, 1.1])
     plt.xlabel ('p(i=1)')
-    plt.ylabel ('Impurity Index')
+    plt.ylabel ('混杂度指数')
     plt.tight_layout ()
     # plt.savefig ('./figures/impurity.png', dpi=300, bbox_inches='tight')
     plt.show ()
@@ -407,8 +407,8 @@ def KNN():
     plot_decision_regions (X_combined_std, y_combined,
                            classifier=knn, test_idx=range (105, 150))
     
-    plt.xlabel ('petal length [standardized]')
-    plt.ylabel ('petal width [standardized]')
+    plt.xlabel ('花瓣长度(标准化)')
+    plt.ylabel ('花瓣宽(标准化)')
     plt.legend (loc='upper left')
     plt.tight_layout ()
     # plt.savefig('./figures/k_nearest_neighbors.png', dpi=300)
