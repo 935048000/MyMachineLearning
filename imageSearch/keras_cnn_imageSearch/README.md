@@ -13,8 +13,9 @@ Using Theano backend.
 https://github.com/willard-yuan/flask-keras-cnn-image-retrieval
 
 
-### 使用个人数据集测试的模型性能
+#### 使用个人数据集测试的模型性能
 模型性能：
+
 batch1 错误率: 5.00%  10/200
 batch2 错误率: 1.00%  2/200
 batch3 错误率: 4.00%  8/200
@@ -25,9 +26,13 @@ batch7 错误率: 5.00%  10/200
 batch8 错误率: 9.09%  20/220
 
 错误识别数：76
+
 识别总数：1620
+
 错误率：4.69%
+
 识别速度：3s
+
 
 
 ### 使用
