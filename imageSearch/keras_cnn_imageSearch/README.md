@@ -6,13 +6,29 @@
 In [1]: import keras
 Using Theano backend.
 ```
-
-keras 2.0.1 及 2.0.5 版本均经过测试可用。
 推荐Python 3.x
 
 此外需要numpy, matplotlib, os, h5py, argparse. 推荐使用anaconda安装
 
 https://github.com/willard-yuan/flask-keras-cnn-image-retrieval
+
+
+### 使用个人数据集测试的模型性能
+模型性能：
+batch1 错误率: 5.00%  10/200
+batch2 错误率: 1.00%  2/200
+batch3 错误率: 4.00%  8/200
+batch4 错误率: 4.00%  8/200
+batch5 错误率: 6.50%  13/200
+batch6 错误率: 6.50%  13/200
+batch7 错误率: 5.00%  10/200
+batch8 错误率: 9.09%  20/220
+
+错误识别数：76
+识别总数：1620
+错误率：4.69%
+识别速度：3s
+
 
 ### 使用
 
