@@ -246,14 +246,14 @@ def main():
 if __name__ == '__main__':
     
     # 相关参数
-    result = "D:/datasets/trainset"
-    imageinfopath = "D:/datasets/imageinfo"
+    result = "H:/datasets/trainset"
+    imageinfopath = "H:/datasets/imageinfo"
     Model = "./model/imageCNNAll.h5"
     # Model = "./model/imageCNN6442.h5"
-    # queryImage = "D:/datasets/trainingset1/19700102130430799.JPEG"
-    # queryImage = "D:/datasets/001/19700102130428480.JPEG"
-    testSet = "D:/datasets/testingset"
-    trainSet = "D:/datasets/trainset"
+    # queryImage = "H:/datasets/trainingset1/19700102130430799.JPEG"
+    # queryImage = "H:/datasets/001/19700102130428480.JPEG"
+    testSet = "H:/datasets/testingset"
+    trainSet = "H:/datasets/trainset"
 
     # imgList = getImageList(testSet)
     #
@@ -295,7 +295,7 @@ if __name__ == '__main__':
     # b = base ()
     
 
-    queryImage = "D:/datasets/testingset/20150630163114680.JPEG"
+    queryImage = "H:/datasets/testingset/20150630163114680.JPEG"
     # queryImage = "./19700102125648863.JPEG"
 
     main()
