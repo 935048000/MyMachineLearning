@@ -2,6 +2,9 @@ import cv2
 import scipy as sp
 from matplotlib import pyplot as plt
 import numpy as np
+from numpy import linalg as LA
+from scipy.spatial.distance import pdist
+from time import time
 
 # 应用比值判别法
 def imageSearch(matches):
@@ -10,66 +13,85 @@ def imageSearch(matches):
         if m.distance < 0.75 * n.distance:
             good.append (m)
     # print('good', len (good))
-    return (len (good))
+    return (len (good)/len (matches))
+
+# 应用比值判别法
+def imageSearch2(avg1,avg2):
+    good = []
+    for m, n in zip(avg1,avg2):
+        if m < 0.75 * n:
+            good.append (m)
+    # print('good', len (good))
+    return (len (good)/len (avg1))
+
+# 归一化
+def normalization(vec):
+    return vec / LA.norm (vec)
+
+# 计算余弦距离
+def Cosine_distance(hash1,hash2):
+    dist = pdist (np.vstack ([hash1, hash2]), 'cosine')
+    return dist
+
+# KNN匹配
+def knn(des1,des2):
+    # FLANN 特征
+    FLANN_INDEX_KDTREE = 0
+    index_params = dict (algorithm=FLANN_INDEX_KDTREE, trees=5)
+    search_params = dict (checks=10)
+    flann = cv2.FlannBasedMatcher (index_params, search_params)
+
+    bf = cv2.BFMatcher (cv2.NORM_HAMMING)
+
+    # K-近邻算法 匹配
+    matches = flann.knnMatch (des1, des2, k=2)
+    # print ("匹配度1： ",imageSearch (matches))
+    return imageSearch (matches)
 
 def imagess(image1,image2):
     img1 = cv2.imread (image1,0)
     img2 = cv2.imread (image2, 0)
-    # img3 = cv2.imread (image3, 0)
 
+    t = time.time ()
     # 启动 SIFT
     sift = cv2.xfeatures2d.SIFT_create ()
 
+    
     DES = []
     # 使用SIFT找到关键点和描述符
     kp1, des1 = sift.detectAndCompute (img1, None)
+    print ("特征提取耗时：", time.time () - t)
+    
     kp2, des2 = sift.detectAndCompute (img2, None)
-    # DES.append(des2)
-    # kp3, des3 = sift.detectAndCompute (img3, None)
-    # DES.append(des3)
+
+    vec = []
+    vec.append(des1)
+    vec.append(des2)
+    
+    d1 = []
+    d2 = []
+    d1.append(des1)
+    d2.append(des2)
+
+    # np.save ('arr1.npy', vec)
+    # vec2 = np.load ('arr1.npy')
+
+    t = time.time ()
+    cd = Cosine_distance(des2[0],des1[0])
+    print ("余弦耗时：", time.time () - t)
+    print("余弦:",cd)
+    
+    # t2 = time.time ()
+    # print("比值判别：",imageSearch2(des2[0],des1[0]))
+    # print ("比值判别时间：", time.time () - t2)
 
 
-    # FLANN 特征
-    FLANN_INDEX_KDTREE = 0
-    index_params = dict (algorithm=FLANN_INDEX_KDTREE, trees=5)
-    search_params = dict (checks=50)  # or pass empty dictionary
-    flann = cv2.FlannBasedMatcher (index_params, search_params)
-
-
-
-    # for i in DES:
-        # matches = flann.knnMatch (des1, i, k=2)
-        # print(imageSearch(matches))
-        # np.savetxt ("./test.txt", i)
-        # print(np.loadtxt ("./test.txt"))
-
-    # 矩阵读写文件
-    # np.savetxt ("./test.txt", des2)
-    # des4 = np.loadtxt ("./test.txt", dtype=float)
-
-    # float64 --》 float32
-    # des4 = np.float32(des4)
-
-    # 矩阵比较
-    # if (des4 == des2).all():
-    #     print("des4 == des2")
-    #     print (des2.dtype, des4.dtype)
-    # else:
-    #     print("des4 ！= des2")
-    #     print (des2.dtype, des4.dtype)
-    #
-
-
-    matches = flann.knnMatch (des1, des2, k=2)
-    print ("匹配度： ",imageSearch (matches))
-
-
-    # 特征点总数
-    # print('特征点总数:', len (matches))
     return 0
 
 
     # 可视化
+
+# 显示图像
 def showImage(img1,img2,kp1,kp2,good):
     h1, w1 = img1.shape[:2]
     h2, w2 = img2.shape[:2]
@@ -90,27 +112,27 @@ def showImage(img1,img2,kp1,kp2,good):
     cv2.imshow ("view", view)
     cv2.waitKey ()
 
+# 获取特征值
+def getFeatus(img):
+    _img = cv2.imread (img, 0)
+    sift = cv2.xfeatures2d.SIFT_create ()
+    kp, des = sift.detectAndCompute (_img, None)
+    return des
+    
+    
+
 if __name__ == '__main__':
     # image1 = './test01/5.JPEG'
     # image2 = './test01/6.JPEG'
     # image3 = './test01/1.JPG'
-    testingset = "D:/datasets/testingset/"
-    trainingset = "D:/datasets/trainset/"
-    
-    img1 = "19700102141330294.JPEG"
-    img2 = "19700102141916383.JPEG"
-    img3 = "19700102143524158.JPEG"
-    img0 = "19700102140046412.JPEG"
+    testingset = "H:/datasets/testingset/"
+    trainingset = "H:/datasets/trainset/"
+    #
+    #
+    # t = time.time()
+    # imagess ("H:/datasets/testingset/20150710161158727.JPEG", "H:/datasets/testingset/20150710161156773.JPEG")
+    # print("总时间：",time.time() - t)
+    # imagess ("H:/datasets/testingset/20150710161156773.JPEG", "H:/datasets/testingset/20150710150006199.JPEG")
+    # imagess ("H:/datasets/testingset/20150710161158727.JPEG", "H:/datasets/testingset/20150710150006199.JPEG")
 
-    image1 = testingset + img1
-    image0 = testingset + img0
-    image2 = trainingset + img2
-    image3 = trainingset + img3
     
-
-    # imagess (image1, image2)
-    # imagess (image1, image3)
-    # imagess (image1, image0)
-    imagess ("D:/datasets/testingset/20150630152018514.JPEG", "D:/datasets/testingset/20150630152018514.JPEG")
-    imagess ("D:/datasets/testingset/20150630152018514.JPEG", "D:/datasets/trainset/20150630144516827.JPEG")
-    imagess ("D:/datasets/testingset/20150630152018514.JPEG", "D:/datasets/trainset/20150630151139490.JPEG")
