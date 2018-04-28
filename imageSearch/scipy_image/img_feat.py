@@ -29,8 +29,8 @@ def normalization(vec):
     return vec / LA.norm (vec)
 
 # 计算余弦距离
-def Cosine_distance(hash1,hash2):
-    dist = pdist (np.vstack ([hash1, hash2]), 'cosine')
+def Cosine_distance(avg1,avg2):
+    dist = pdist (np.vstack ([avg1, avg2]), 'cosine')
     return dist
 
 # KNN匹配
@@ -52,7 +52,7 @@ def imagess(image1,image2):
     img1 = cv2.imread (image1,0)
     img2 = cv2.imread (image2, 0)
 
-    t = time.time ()
+    t = time ()
     # 启动 SIFT
     sift = cv2.xfeatures2d.SIFT_create ()
 
@@ -60,7 +60,7 @@ def imagess(image1,image2):
     DES = []
     # 使用SIFT找到关键点和描述符
     kp1, des1 = sift.detectAndCompute (img1, None)
-    print ("特征提取耗时：", time.time () - t)
+    print ("特征提取耗时：", time () - t)
     
     kp2, des2 = sift.detectAndCompute (img2, None)
 
@@ -76,9 +76,10 @@ def imagess(image1,image2):
     # np.save ('arr1.npy', vec)
     # vec2 = np.load ('arr1.npy')
 
-    t = time.time ()
+
+    t = time ()
     cd = Cosine_distance(des2[0],des1[0])
-    print ("余弦耗时：", time.time () - t)
+    print ("余弦耗时：", time () - t)
     print("余弦:",cd)
     
     # t2 = time.time ()
@@ -122,17 +123,16 @@ def getFeatus(img):
     
 
 if __name__ == '__main__':
-    # image1 = './test01/5.JPEG'
-    # image2 = './test01/6.JPEG'
-    # image3 = './test01/1.JPG'
     testingset = "H:/datasets/testingset/"
     trainingset = "H:/datasets/trainset/"
-    #
-    #
-    # t = time.time()
+
+    # t = time()
     # imagess ("H:/datasets/testingset/20150710161158727.JPEG", "H:/datasets/testingset/20150710161156773.JPEG")
-    # print("总时间：",time.time() - t)
+    # print("总时间：",time() - t)
     # imagess ("H:/datasets/testingset/20150710161156773.JPEG", "H:/datasets/testingset/20150710150006199.JPEG")
     # imagess ("H:/datasets/testingset/20150710161158727.JPEG", "H:/datasets/testingset/20150710150006199.JPEG")
 
-    
+    test = getFeatus("H:/datasets/testingset/20150710161158727.JPEG")
+    print(test)
+    print(test.shape)
+    print(len(test[0]))
